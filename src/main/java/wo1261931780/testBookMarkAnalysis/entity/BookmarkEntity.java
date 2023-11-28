@@ -1,6 +1,7 @@
-package test;
+package wo1261931780.testBookMarkAnalysis.entity;
 
 import jdk.jfr.DataAmount;
+import lombok.Data;
 
 /**
  * Created by Intellij IDEA.
@@ -13,8 +14,6 @@ import jdk.jfr.DataAmount;
  */
 @Data
 public class BookmarkEntity {
-	// <A HREF="https://www.cn.emb-japan.go.jp/itpr_zh/consular.html" ADD_DATE="1683800060">赴日签证（签证咨询） | 日本国驻华大使馆</A>
-
 	private String href;
 	private String addDate;
 	private String title;
