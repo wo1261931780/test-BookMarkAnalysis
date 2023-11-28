@@ -1,7 +1,14 @@
-package wo1261931780.testBookMarkAnalysis.service;
+package wo1261931780.testBookMarkAnalysis.service.impl;
 
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.swagger.v3.oas.annotations.servers.Server;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import wo1261931780.testBookMarkAnalysis.entity.BookMarks;
+import wo1261931780.testBookMarkAnalysis.mapper.BookMarksMapper;
+import wo1261931780.testBookMarkAnalysis.service.BookmarksParserService;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,16 +18,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author junw
+ * Created by Intellij IDEA.
+ * Project:test-BookMarkAnalysis
+ * Package:wo1261931780.testBookMarkAnalysis.service.impl
+ *
+ * @author liujiajun_junw
+ * @Date 2023-11-15-38  星期二
+ * @Description
  */
 @Slf4j
-public class BookmarkParserService {
-	public static void main(String[] args) {
-
+@Service
+public class BookmarksParserServiceImpl extends ServiceImpl<BookMarksMapper, BookMarks> implements BookmarksParserService {
+	@Override
+	public List<BookMarks> parseBookMarks() {
 		List<BookMarks> bookmarkList = new ArrayList<>();
-
 		try {
-			File file = new File("C:\\Users\\junw\\Documents\\GitHub\\test-BookMarkAnalysis\\src\\main\\java\\wo1261931780\\testBookMarkAnalysis\\entity\\bookmark.html");
+			// File file = new File("C:\\Users\\junw\\Documents\\GitHub\\test-BookMarkAnalysis\\src\\main\\java\\wo1261931780\\testBookMarkAnalysis\\bookmarks\\bookmark2.html");
+			File file = new File("C:\\Users\\junw\\Documents\\GitHub\\test-BookMarkAnalysis\\src\\main\\java\\wo1261931780\\testBookMarkAnalysis\\bookmarks\\bookmark.html");
 			Scanner scanner = new Scanner(file);
 
 			while (scanner.hasNextLine()) {
@@ -40,6 +54,7 @@ public class BookmarkParserService {
 		// 处理解析结果
 		log.info("bookmarkList:{}", bookmarkList.size());
 		log.info("bookmarkList:{}", bookmarkList);
+		return bookmarkList;
 	}
 
 	private static void parseH3(String text, List<BookMarks> list) {
@@ -69,7 +84,7 @@ public class BookmarkParserService {
 			entity.setTitle(matcher.group(1));
 		}
 		log.info("entity:{}", entity);
-
+		entity.setId(IdUtil.getSnowflakeNextId());
 		list.add(entity);
 	}
 
@@ -96,7 +111,9 @@ public class BookmarkParserService {
 		}
 
 		log.info("entity:{}", entity);
-
+		// if (StrUtil.isEmpty(entity.getId().toString())) {
+		entity.setId(IdUtil.getSnowflakeNextId());
+		// }
 		list.add(entity);
 	}
 }
