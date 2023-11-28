@@ -33,26 +33,40 @@ public class BookmarkParser {
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
 				log.info("line:{}", line);
+				if (Pattern.compile("<H3([^>]*)>").matcher(line).find()) {
+					// 处理 <H3> 逻辑
+					parseH3(line, bookmarkList);
+				} else if (Pattern.compile("<A([^>]*)>").matcher(line).find()) {
+					parseA(line, bookmarkList);
 
-				// h3标签正则
-				Pattern h3Pattern = Pattern.compile("<H3([^>]*)>");
-				Matcher h3Matcher = h3Pattern.matcher(line);
-				while (h3Matcher.find()) {
-					parseH3(h3Matcher.group(1), bookmarkList);
+					// 独立匹配单条<A>标签
+					// BookmarkEntity entity = parseAEntity(line);
+
+					// if (entity != null) {
+					// 	bookmarkList.add(entity);
+					// }
 				}
+				// h3标签正则
+				// Pattern h3Pattern = Pattern.compile("<H3([^>]*)>");
+				// Matcher h3Matcher = h3Pattern.matcher(line);
+				// while (h3Matcher.find()) {
+				// 	parseH3(h3Matcher.group(1), bookmarkList);
+				// }
 
 				// a标签正则
-				Pattern aPattern = Pattern.compile("<A([^>]*)>");
-				Matcher aMatcher = aPattern.matcher(line);
-				while (aMatcher.find()) {
-					parseA(aMatcher.group(1), bookmarkList);
-				}
+				// Pattern aPattern = Pattern.compile("<A([^>]*)>");
+				// Matcher aMatcher = aPattern.matcher(line);
+				// while (aMatcher.find()) {
+				// 	parseA(aMatcher.group(1), bookmarkList);
+				// }
 			}
 			scanner.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		// 处理解析结果
+		log.info("bookmarkList:{}", bookmarkList.size());
+		log.info("bookmarkList:{}", bookmarkList);
 	}
 
 	private static void parseH3(String text, List<BookmarkEntity> list) {
@@ -78,7 +92,7 @@ public class BookmarkParser {
 		}
 		pattern = Pattern.compile("\">([^<]+)</H3>");
 		matcher = pattern.matcher(text);
-		if(matcher.find()){
+		if (matcher.find()) {
 			entity.setTitle(matcher.group(1));
 		}
 		log.info("entity:{}", entity);
@@ -104,7 +118,7 @@ public class BookmarkParser {
 		}
 		pattern = Pattern.compile("\">([^<]+)</A>");
 		matcher = pattern.matcher(text);
-		if(matcher.find()){
+		if (matcher.find()) {
 			entity.setTitle(matcher.group(1));
 		}
 
