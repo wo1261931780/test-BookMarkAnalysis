@@ -17,19 +17,212 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+		<!--=============================================================================================-->
+		<!--下面两个配置基本地启动，后面的按需修改-->
+		<!--=============================================================================================-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
+			<version>3.2.0</version>
 		</dependency>
-
+		<!--spring网络WEB-->
+		<!--使用SpringMVC构建Web，包括RESTful，应用程序。使用Apache Tomcat作为默认的嵌入式容器。-->
+		<!--里面已经包含了springMVC的内容-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>3.2.0</version>
+			<!--<scope>test</scope>-->
+			<!--上面的scope表示作用范围-->
+			<!--在没有说明的情况下，scope默认就是compile-->
+			<!--如果我把mysql这些数据库驱动jar包设置为runtime-->
+			<!--那么我在日常使用的过程中，是无法访问这些类的-->
 		</dependency>
+		<!--=============================================================================================-->
+		<!--DEVELOPER_TOOLS-->
+		<!--=============================================================================================-->
+		<!--Lombok开发者工具-->
+		<!--帮助减少模板代码的Java注释库。-->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>1.18.30</version>
+			<optional>true</optional>
+			<scope>provided</scope>
+			<!--因为只是源代码中提供了对应的功能-->
+			<!--所以其实不需要参与源代码的打包-->
+		</dependency>
+		<!-- hutool -->
+		<!--字符串不为空的判断工具-->
+		<!--Hutool是一个小而全的Java工具类库，通过静态方法封装，降低相关API的学习成本，提高工作效率，使Java拥有函数式语言般的优雅。-->
+		<!--Hutool是项目中“util”包友好的替代，它节省了开发人员对项目中公用类和公用工具方法的封装时间，使开发专注于业务，同时可以最大限度的避免封装不完善带来的bug。-->
+		<!--【以前】打开搜索引擎 -> 搜“Java MD5加密” -> 打开某篇博客-> 复制粘贴 -> 改改好用-->
+		<!--【现在】引入Hutool -> SecureUtil.md5()-->
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>5.8.23</version>
+		</dependency>
+		<!--=============================================================================================-->
+		<!--数据库和jdbc-->
+		<!--=============================================================================================-->
+		<!--JDBC API SQL-->
+		<!--数据库连接API，定义了客户端如何连接和查询数据库。-->
+		<!--没有配置，项目报错，启动失败-->
+		<!--<dependency>-->
+		<!--	<groupId>org.springframework.boot</groupId>-->
+		<!--spring操作数据库的包-->
+		<!--<artifactId>spring-boot-starter-data-jdbc</artifactId>-->
+		<!--<version>3.2.0</version>-->
+		<!--</dependency>-->
+
+		<!--Spring Data JDBC SQL-->
+		<!--使用Spring Data，用普通的JDBC在SQL存储中保存数据。-->
+		<!--没有配置，项目报错，启动失败-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+			<version>3.2.0</version>
+		</dependency>
+		<!--MySQL JDBC driver.驱动-->
+		<!--mysql的驱动-->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.33</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!--=============================================================================================-->
+		<!--Mybatis-->
+		<!--=============================================================================================-->
+		<!--mybatis的分页助手插件-->
+		<!--2023年11月26日14:24:04，有依赖冲突问题，和Mybatis-plus-->
+		<!--<dependency>-->
+		<!--	<groupId>com.github.pagehelper</groupId>-->
+		<!--	<artifactId>pagehelper</artifactId>-->
+		<!--	<version>6.0.0</version>-->
+		<!--</dependency>-->
+		<!--JSP标准标签库（JSTL）是一个JSP标签集合，它封装了JSP应用的通用核心功能。-->
+		<!--JSTL支持通用的、结构化的任务，比如迭代，条件判断，XML文档操作，国际化标签，SQL标签。 除了这些，它还提供了一个框架来使用集成JSTL的自定义标签。-->
+		<!--<dependency>-->
+		<!--	<groupId>jstl</groupId>-->
+		<!--	<artifactId>jstl</artifactId>-->
+		<!--	<version>1.1.2</version>-->
+		<!--</dependency>-->
+		<!--在JSP页面中使用的标记所组成的库。JSP容器推出时带有一个小型的、默认的标记库。-->
+		<!--<dependency>-->
+		<!--	<groupId>taglibs</groupId>-->
+		<!--	<artifactId>standard</artifactId>-->
+		<!--	<version>1.1.2</version>-->
+		<!--</dependency>-->
+		<!--MyBatis框架SQL-->
+		<!--持久性框架，支持自定义SQL，存储过程和高级映射。MyBatis使用XML描述符或注解将对象与存储程序或SQL语句结合起来。-->
+		<!--这里是mybatis按照spring的标准，开发出来的整合包-->
+		<!--没有配置，项目报错，启动失败-->
+		<!--<dependency>-->
+		<!--	<groupId>org.mybatis.spring.boot</groupId>-->
+		<!--	<artifactId>mybatis-spring-boot-starter</artifactId>-->
+		<!--	<version>3.0.2</version>-->
+		<!--</dependency>-->
+
+		<!--使用mybatis-plus以后，这些东西就不需要了-->
+		<!--没有配置，项目报错，启动失败-->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-boot-starter</artifactId>
+			<version>3.5.4.1</version>
+		<!--依赖中一共两个jar包-->
+		<!--一个是mybatis和spring整合包-->
+		<!--一个是mybatis包-->
+		</dependency>
+		<!-- mybatis-plus 多数据源 -->
+		<!--目前，多数项目会有多数据源的要求，或者是主从部署的要求，所以我们还需要引入 mybatis-plus 关于多数据源的依赖：-->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+			<version>4.2.0</version>
+		</dependency>
+		<!--mybatis-plus的代码生成器-->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-generator</artifactId>
+			<version>3.5.4</version>
+		</dependency>
+
+		<!--生成器对应的模板技术-->
+		<!--Web应用程序：作为为应用程序的视图，展示数据-->
+		<!--源代码生成：Velocity用于基于模板生成Java源代码-->
+		<!--自动电子邮件：网站注册，认证等的电子邮件模板-->
+		<!--网页静态化：基于velocity模板，生成静态网页-->
+		<!--<dependency>-->
+		<!--	<groupId>org.apache.velocity</groupId>-->
+		<!--	<artifactId>velocity-engine-core</artifactId>-->
+		<!--	<version>2.3</version>-->
+		<!--</dependency>-->
+		<!--mybatis-plus-generator-ui可视化工具-->
+		<!--提供交互式的WebUI用于生成兼容mybatis-plus框架的相关功能代码，-->
+		<!--包括Entity,Mapper,Mapper.xml,Service,Controller等-->
+		<!--可以自定义模板以及各类输出参数，也可通过SQL查询语句直接生成代码。-->
+		<!--引入maven的相关依赖，注意scope只需要写test就可以了-->
+		<!--在项目的test目录新建一个启动类，代码示例如下：-->
+		<!--运行该启动类，启动一个Generator Server。然后访问http://localhost:8068（端口是可配置的）即可进入到管理界面。-->
+		<!--这个依赖比较尴尬，一方面更新比较慢，导致依赖总是报错，另一个方面，使用的次数不多，这里暂时保留，以防万一-->
+		<!--<dependency>-->
+		<!--	<groupId>com.github.davidfantasy</groupId>-->
+		<!--	<artifactId>mybatis-plus-generator-ui</artifactId>-->
+		<!--	<version>2.0.5</version>-->
+		<!--	<scope>test</scope>-->
+		<!--</dependency>-->
+
+		<!--Mybatis-Flex 是一个优雅的 Mybatis 增强框架，它非常轻量、同时拥有极高的性能与灵活性。-->
+		<!--MyBatis-Flex 的查询单条数据的速度，大概是 MyBatis-Plus 的 5 ~ 10+ 倍。-->
+		<!--MyBatis-Flex 的查询 10 条数据的速度，大概是 MyBatis-Plus 的 5~10 倍左右。-->
+		<!--Mybatis-Flex 的分页查询速度，大概是 Mybatis-Plus 的 5~10 倍左右。-->
+		<!--Mybatis-Flex 的数据更新速度，大概是 Mybatis-Plus 的 5~10+ 倍。-->
+		<!--<dependency>-->
+		<!--	<groupId>com.mybatis-flex</groupId>-->
+		<!--	<artifactId>mybatis-flex-spring-boot-starter</artifactId>-->
+		<!--	<version>1.7.5</version>-->
+		<!--</dependency>-->
+		<!--Mybatis-flex的apt依赖-->
+		<!--<dependency>-->
+		<!--	<groupId>com.mybatis-flex</groupId>-->
+		<!--	<artifactId>mybatis-flex-processor</artifactId>-->
+		<!--	<version>1.7.5</version>-->
+		<!--	<scope>provided</scope>-->
+		<!--</dependency>-->
+
+		<!--=============================================================================================-->
+		<!--swagger文档组件-->
+		<!--=============================================================================================-->
+		<!--这里需要使用swagger技术，实际上是为了生成接口文档-->
+		<!--Spring Boot 3 只支持OpenAPI3规范-->
+		<!--Knife4j提供的starter已经引用springdoc-openapi的jar，开发者需注意避免jar包冲突-->
+		<!--JDK版本必须 >= 17-->
+		<!--详细Demo请参考knife4j-spring-boot3-demo-->
+		<!--访问Knife4j的文档地址：http://ip:port/doc.html即可查看文档-->
+		<!--<dependency>-->
+		<!--	<groupId>com.github.xiaoymin</groupId>-->
+		<!--	<artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>-->
+		<!--	<version>4.3.0</version>-->
+		<!--</dependency>-->
+
+		<!--swagger文档-->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<!--正如XPath之于XML文档一样，JsonPath为Json文档提供了解析能力。-->
+		<!--通过使用JsonPath，你可以方便的查找节点、获取想要的数据，JsonPath是Json版的XPath。-->
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
 		</dependency>
 	</dependencies>
 

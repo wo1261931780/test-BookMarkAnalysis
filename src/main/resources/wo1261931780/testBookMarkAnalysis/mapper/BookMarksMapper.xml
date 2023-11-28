@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wo1261931780.testBookMarkAnalysis.mapper.BookMarksMapper">
+  <resultMap id="BaseResultMap" type="wo1261931780.testBookMarkAnalysis.entity.BookMarks">
+    <!--@mbg.generated-->
+    <!--@Table test_technical.book_marks-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="href" jdbcType="LONGVARCHAR" property="href" />
+    <result column="add_date" jdbcType="BIGINT" property="addDate" />
+    <result column="title" jdbcType="LONGVARCHAR" property="title" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="last_modified" jdbcType="BIGINT" property="lastModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, href, add_date, title, `type`, last_modified
+  </sql>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update test_technical.book_marks
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="href = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.href,jdbcType=LONGVARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="add_date = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.addDate,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="title = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.title,jdbcType=LONGVARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="`type` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.type,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="last_modified = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.lastModified,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update test_technical.book_marks
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="href = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.href != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.href,jdbcType=LONGVARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="add_date = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.addDate != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.addDate,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="title = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.title != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.title,jdbcType=LONGVARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="`type` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.type != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.type,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="last_modified = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.lastModified != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.lastModified,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <insert id="batchInsert" parameterType="map">
+    <!--@mbg.generated-->
+    insert into test_technical.book_marks
+    (id, href, add_date, title, `type`, last_modified)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id,jdbcType=BIGINT}, #{item.href,jdbcType=LONGVARCHAR}, #{item.addDate,jdbcType=BIGINT}, 
+        #{item.title,jdbcType=LONGVARCHAR}, #{item.type,jdbcType=VARCHAR}, #{item.lastModified,jdbcType=BIGINT}
+        )
+    </foreach>
+  </insert>
+  <insert id="insertOrUpdate" parameterType="wo1261931780.testBookMarkAnalysis.entity.BookMarks">
+    <!--@mbg.generated-->
+    insert into test_technical.book_marks
+    (id, href, add_date, title, `type`, last_modified)
+    values
+    (#{id,jdbcType=BIGINT}, #{href,jdbcType=LONGVARCHAR}, #{addDate,jdbcType=BIGINT}, 
+      #{title,jdbcType=LONGVARCHAR}, #{type,jdbcType=VARCHAR}, #{lastModified,jdbcType=BIGINT}
+      )
+    on duplicate key update 
+    id = #{id,jdbcType=BIGINT}, 
+    href = #{href,jdbcType=LONGVARCHAR}, 
+    add_date = #{addDate,jdbcType=BIGINT}, 
+    title = #{title,jdbcType=LONGVARCHAR}, 
+    `type` = #{type,jdbcType=VARCHAR}, 
+    last_modified = #{lastModified,jdbcType=BIGINT}
+  </insert>
+  <insert id="insertOrUpdateSelective" parameterType="wo1261931780.testBookMarkAnalysis.entity.BookMarks">
+    <!--@mbg.generated-->
+    insert into test_technical.book_marks
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="href != null">
+        href,
+      </if>
+      <if test="addDate != null">
+        add_date,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="lastModified != null">
+        last_modified,
+      </if>
+    </trim>
+    values
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="href != null">
+        #{href,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="addDate != null">
+        #{addDate,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModified != null">
+        #{lastModified,jdbcType=BIGINT},
+      </if>
+    </trim>
+    on duplicate key update 
+    <trim suffixOverrides=",">
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="href != null">
+        href = #{href,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="addDate != null">
+        add_date = #{addDate,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModified != null">
+        last_modified = #{lastModified,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+</mapper>

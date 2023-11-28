@@ -3,6 +3,8 @@ package wo1261931780.testBookMarkAnalysis.entity;
 import jdk.jfr.DataAmount;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * Created by Intellij IDEA.
  * Project:analysis_booklist
@@ -14,9 +16,10 @@ import lombok.Data;
  */
 @Data
 public class BookmarkEntity {
+	private long id;
 	private String href;
-	private String addDate;
-	private String title;
+	private long addDate;
+	// private longtext title;
 	private String type;
-	private String lastModified;
+	private long lastModified;
 }
