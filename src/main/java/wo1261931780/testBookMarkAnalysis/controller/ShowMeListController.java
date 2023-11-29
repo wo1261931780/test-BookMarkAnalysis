@@ -102,7 +102,7 @@ public class ShowMeListController {
 			}
 		}
 		int batchInsert = bookMarksService.batchInsert2(bookMarksList);
-		return ShowResult.sendSuccess();
+		return ShowResult.sendSuccess(batchInsert > 0);
 	}
 
 }
