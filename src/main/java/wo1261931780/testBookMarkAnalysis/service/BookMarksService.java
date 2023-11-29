@@ -29,6 +29,9 @@ public class BookMarksService extends ServiceImpl<BookMarksMapper, BookMarks> {
     public int batchInsert(List<BookMarks> list) {
         return baseMapper.batchInsert(list);
     }
+    public int batchInsert2(List<BookMarks> list) {
+        return baseMapper.batchInsert2(list);
+    }
     
     public int insertOrUpdate(BookMarks record) {
         return baseMapper.insertOrUpdate(record);

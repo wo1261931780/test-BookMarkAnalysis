@@ -1,8 +1,10 @@
 package wo1261931780.testBookMarkAnalysis.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.injector.methods.InsertBatchSomeColumn;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import wo1261931780.testBookMarkAnalysis.config.ShowResult;
@@ -11,6 +13,7 @@ import wo1261931780.testBookMarkAnalysis.mapper.BookMarksMapper;
 import wo1261931780.testBookMarkAnalysis.service.BookMarksService;
 import wo1261931780.testBookMarkAnalysis.service.BookmarksParserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -82,6 +85,24 @@ public class ShowMeListController {
 		log.info("解析得到的书签数量：{}", bookMarks.size());
 		log.info("批量插入的数量：{}", batchInsert);
 		return ShowResult.sendSuccess(batchInsert);
+	}
+
+	@PostMapping("/insertNewOne")
+	public ShowResult<Boolean> insertNewOne(BookMarks bookMarks) {
+		ArrayList<BookMarks> bookMarksList = new ArrayList<>();
+		List<String> oneUrls = bookMarksMapper.selectAll();
+		for (String oneUrl : oneUrls) {
+			BookMarks bookMarks1 = new BookMarks();
+			LambdaQueryWrapper<BookMarks> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+			lambdaQueryWrapper.eq(BookMarks::getHref, oneUrl);
+			BookMarks one = bookMarksService.getOne(lambdaQueryWrapper);
+			BeanUtils.copyProperties(one, bookMarks1);
+			if (bookMarks1.getId() != null) {
+				bookMarksList.add(bookMarks1);
+			}
+		}
+		int batchInsert = bookMarksService.batchInsert2(bookMarksList);
+		return ShowResult.sendSuccess();
 	}
 
 }

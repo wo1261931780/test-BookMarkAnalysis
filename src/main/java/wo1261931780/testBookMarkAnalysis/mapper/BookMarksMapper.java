@@ -22,8 +22,11 @@ public interface BookMarksMapper extends BaseMapper<BookMarks> {
     int updateBatchSelective(List<BookMarks> list);
 
     int batchInsert(@Param("list") List<BookMarks> list);
+    int batchInsert2(@Param("list") List<BookMarks> list);
 
     int insertOrUpdate(BookMarks record);
 
     int insertOrUpdateSelective(BookMarks record);
+
+    List<String> selectAll();
 }
