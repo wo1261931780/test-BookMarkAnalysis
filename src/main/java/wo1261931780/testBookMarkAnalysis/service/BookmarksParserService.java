@@ -19,4 +19,7 @@ import java.util.List;
 
 public interface BookmarksParserService extends IService<BookMarks> {
 	List<BookMarks> parseBookMarks();
+
+	BookMarks selectByUrl(String url);
+
 }

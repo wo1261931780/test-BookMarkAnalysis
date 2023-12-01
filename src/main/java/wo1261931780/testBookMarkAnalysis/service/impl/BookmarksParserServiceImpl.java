@@ -2,12 +2,15 @@ package wo1261931780.testBookMarkAnalysis.service.impl;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.swagger.v3.oas.annotations.servers.Server;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wo1261931780.testBookMarkAnalysis.entity.BookMarks;
 import wo1261931780.testBookMarkAnalysis.mapper.BookMarksMapper;
+import wo1261931780.testBookMarkAnalysis.service.BookMarksService;
 import wo1261931780.testBookMarkAnalysis.service.BookmarksParserService;
 
 import java.io.File;
@@ -16,6 +19,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by Intellij IDEA.
@@ -29,6 +33,9 @@ import java.util.regex.Pattern;
 @Slf4j
 @Service
 public class BookmarksParserServiceImpl extends ServiceImpl<BookMarksMapper, BookMarks> implements BookmarksParserService {
+	@Autowired
+	private BookMarksService bookMarksService;
+
 	@Override
 	public List<BookMarks> parseBookMarks() {
 		List<BookMarks> bookmarkList = new ArrayList<>();
@@ -56,6 +63,34 @@ public class BookmarksParserServiceImpl extends ServiceImpl<BookMarksMapper, Boo
 		log.info("bookmarkList:{}", bookmarkList);
 		return bookmarkList;
 	}
+
+	/**
+	 * @param url
+	 * @return
+	 */
+	@Override
+	public BookMarks selectByUrl(String url) {
+		if (StrUtil.isNotEmpty(url)) {
+			LambdaQueryWrapper<BookMarks> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+			lambdaQueryWrapper.eq(BookMarks::getHref, url);
+			List<BookMarks> bookMarks = bookMarksService.list(lambdaQueryWrapper);
+			bookMarks.sort((o1, o2) -> {
+				if (o1.getAddDate() > o2.getAddDate()) {
+					return 1;
+				} else if (o1.getAddDate() < o2.getAddDate()) {
+					return -1;
+				} else {
+					return 0;
+				}
+			});
+			if (!bookMarks.isEmpty()) {
+				return bookMarks.get(0);
+			}
+		}
+		log.info("url is null,something wrong!");
+		return null;
+	}
+
 
 	private static void parseH3(String text, List<BookMarks> list) {
 		BookMarks entity = new BookMarks();

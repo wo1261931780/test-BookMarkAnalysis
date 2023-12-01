@@ -87,9 +87,14 @@ public class ShowMeListController {
 		return ShowResult.sendSuccess(batchInsert);
 	}
 
+	/**
+	 * 书签去重后插入新表
+	 *
+	 * @return 插入结果
+	 */
 	@PostMapping("/insertNewOne")
-	public ShowResult<Boolean> insertNewOne(BookMarks bookMarks) {
-		ArrayList<BookMarks> bookMarksList = new ArrayList<>();
+	public ShowResult<Boolean> insertNewOne() {
+		List<BookMarks> bookMarksList = new ArrayList<>();
 		List<String> oneUrls = bookMarksMapper.selectAll();
 		for (String oneUrl : oneUrls) {
 			BookMarks bookMarks1 = new BookMarks();
