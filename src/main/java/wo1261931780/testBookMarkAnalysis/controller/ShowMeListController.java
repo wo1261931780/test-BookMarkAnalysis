@@ -1,5 +1,6 @@
 package wo1261931780.testBookMarkAnalysis.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.injector.methods.InsertBatchSomeColumn;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -98,13 +99,15 @@ public class ShowMeListController {
 		List<String> oneUrls = bookMarksMapper.selectAll();
 		for (String oneUrl : oneUrls) {
 			BookMarks bookMarks1 = new BookMarks();
-			LambdaQueryWrapper<BookMarks> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-			lambdaQueryWrapper.eq(BookMarks::getHref, oneUrl);
-			BookMarks one = bookMarksService.getOne(lambdaQueryWrapper);
-			BeanUtils.copyProperties(one, bookMarks1);
-			if (bookMarks1.getId() != null) {
-				bookMarksList.add(bookMarks1);
+			// LambdaQueryWrapper<BookMarks> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+			// lambdaQueryWrapper.eq(BookMarks::getHref, oneUrl);
+			// BookMarks one = bookMarksService.selectByUrl(lambdaQueryWrapper);
+			BookMarks selectedByUrl = bookmarksParserService.selectByUrl(oneUrl);
+			if (ObjectUtil.isNull(selectedByUrl)) {// 为空则跳过
+				continue;
 			}
+			BeanUtils.copyProperties(selectedByUrl, bookMarks1);
+			bookMarksList.add(bookMarks1);
 		}
 		int batchInsert = bookMarksService.batchInsert2(bookMarksList);
 		return ShowResult.sendSuccess(batchInsert > 0);

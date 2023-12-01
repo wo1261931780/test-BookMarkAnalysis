@@ -196,7 +196,7 @@
 		order by href;
 	</select>
 
-	<select id="batchInsert2" resultType="int">
+	<select id="batchInsert2" parameterType="map" resultType="java.lang.Integer">
 		<!--@mbg.generated-->
 		insert into test_technical.book_marks2
 		(id, href, add_date, title, `type`, last_modified)
