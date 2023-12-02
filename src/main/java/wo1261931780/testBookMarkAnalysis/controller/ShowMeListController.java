@@ -1,8 +1,7 @@
 package wo1261931780.testBookMarkAnalysis.controller;
 
+import cn.hutool.core.io.file.FileWriter;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.injector.methods.InsertBatchSomeColumn;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -15,9 +14,11 @@ import wo1261931780.testBookMarkAnalysis.service.BookMarksService;
 import wo1261931780.testBookMarkAnalysis.service.BookmarksParserService;
 
 import java.io.File;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.constant.ConstantDescs.NULL;
 
 /**
  * Created by Intellij IDEA.
@@ -111,20 +112,43 @@ public class ShowMeListController {
 			BeanUtils.copyProperties(selectedByUrl, bookMarks1);
 			bookMarksList.add(bookMarks1);
 		}
+		log.info("去重后的书签数量：{}", bookMarksList.size());
 		int batchInsert = bookMarksService.batchInsert2(bookMarksList);
 		return ShowResult.sendSuccess(batchInsert > 0);
 	}
 
-	@PostMapping
-	public ShowResult<Boolean> requestWriteHtml() {
+	@PostMapping("/requestWriteHtml")
+	public ShowResult<Boolean> requestWriteHtml() throws Exception {
 		List<BookMarks> bookMarksList = bookMarksService.list();
-		File file = new File("D:\\test\\bookmarks.html");
-		InputStream fileinputStream = new InputStream() {
-			@Override
-			public int read() {
-				return 0;
+		bookMarksList.sort((b1, b2) -> b1.getHref().compareToIgnoreCase(b2.getHref()));
+		File demoFile = new File("C:\\Users\\junw\\Documents\\GitHub\\test-BookMarkAnalysis\\src\\main\\java\\wo1261931780\\testBookMarkAnalysis\\bookmarks\\result.txt");
+		// boolean newFile = file.createNewFile();
+		log.info("创建文件：{}", demoFile.isFile());
+		// BufferedWriter x2 = new BufferedWriter(new FileWriter(demoFile.getName()));
+		// char[] x3 = new char[1024];
+		bookMarksList.forEach(s -> {
+			log.info("书签：{}", s);
+			if (ObjectUtil.isNotNull(s)) {
+				FileWriter writer = new FileWriter(demoFile);
+				switch (s.getType()) {
+					case "a":
+						writer.append("<DT><A HREF=\"" + s.getHref() + "\" ADD_DATE=\"" + s.getAddDate() + "ICON=\" \">" + s.getTitle() + "</A>\r\n");
+						// x2.write("<DT><A HREF=\"" + s.getHref() + "\" ADD_DATE=\"" + s.getAddDate() + "ICON=\" \">" + s.getTitle() + "</A>");
+						// <DT><A HREF="https://www.baidu.com/" ADD_DATE="1645517630" ICON="=">百度</A>
+						break;
+					case "H3":
+						writer.append("<DT><H3 HREF=\" \" ADD_DATE=\" " + s.getAddDate() + " LAST_MODIFIED=\"" + s.getLastModified() + "\">" + s.getTitle() + "</H3>\r\n");
+						// log.info("书签：{}", s);
+						break;
+					default:
+						// s.setLastModified(0);
+						break;
+				}
 			}
-		};
+		});
+		log.info("测试：" + demoFile);
+		// 将列表组装，输出到txt文件中，手动新增到一个html文件
+		// 文件夹的形式同理
 		return ShowResult.sendSuccess(Boolean.TRUE);
 	}
 

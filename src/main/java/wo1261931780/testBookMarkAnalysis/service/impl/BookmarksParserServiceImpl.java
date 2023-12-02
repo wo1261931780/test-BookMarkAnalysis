@@ -41,7 +41,7 @@ public class BookmarksParserServiceImpl extends ServiceImpl<BookMarksMapper, Boo
 		List<BookMarks> bookmarkList = new ArrayList<>();
 		try {
 			// File file = new File("C:\\Users\\junw\\Documents\\GitHub\\test-BookMarkAnalysis\\src\\main\\java\\wo1261931780\\testBookMarkAnalysis\\bookmarks\\bookmark2.html");
-			File file = new File("C:\\Users\\junw\\Documents\\GitHub\\test-BookMarkAnalysis\\src\\main\\java\\wo1261931780\\testBookMarkAnalysis\\bookmarks\\bookmark.html");
+			File file = new File("C:\\Users\\junw\\Documents\\GitHub\\test-BookMarkAnalysis\\src\\main\\java\\wo1261931780\\testBookMarkAnalysis\\bookmarks\\bookmarks.html");
 			Scanner scanner = new Scanner(file);
 
 			while (scanner.hasNextLine()) {
