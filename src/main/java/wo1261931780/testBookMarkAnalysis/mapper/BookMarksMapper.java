@@ -29,4 +29,6 @@ public interface BookMarksMapper extends BaseMapper<BookMarks> {
     int insertOrUpdateSelective(BookMarks record);
 
     List<String> selectAll();
+
+    List<BookMarks> selectAllH3();
 }

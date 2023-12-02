@@ -102,9 +102,6 @@ public class ShowMeListController {
 		List<String> oneUrls = bookMarksMapper.selectAll();
 		for (String oneUrl : oneUrls) {
 			BookMarks bookMarks1 = new BookMarks();
-			// LambdaQueryWrapper<BookMarks> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-			// lambdaQueryWrapper.eq(BookMarks::getHref, oneUrl);
-			// BookMarks one = bookMarksService.selectByUrl(lambdaQueryWrapper);
 			BookMarks selectedByUrl = bookmarksParserService.selectByUrl(oneUrl);
 			if (ObjectUtil.isNull(selectedByUrl)) {// 为空则跳过
 				continue;
@@ -117,15 +114,26 @@ public class ShowMeListController {
 		return ShowResult.sendSuccess(batchInsert > 0);
 	}
 
+	@PostMapping("/insertNewH3")
+	public ShowResult<Boolean> insertNewH3() {
+		List<BookMarks> oneUrls = bookMarksMapper.selectAllH3();
+		log.info("当前文件夹数量：{}", oneUrls.size());
+		int batchInsert = bookMarksService.batchInsert2(oneUrls);
+		return ShowResult.sendSuccess(batchInsert > 0);
+	}
+
 	@PostMapping("/requestWriteHtml")
 	public ShowResult<Boolean> requestWriteHtml() throws Exception {
-		List<BookMarks> bookMarksList = bookMarksService.list();
-		bookMarksList.sort((b1, b2) -> b1.getHref().compareToIgnoreCase(b2.getHref()));
+		List<BookMarks> bookMarksList = bookMarksService.list(); //todo 列表不对
+		bookMarksList.sort((b1, b2) -> {
+			if (b1.getHref() != null && b2.getHref() != null) {
+				return b1.getHref().compareTo(b2.getHref());
+			} else {
+				return 0;
+			}
+		});
 		File demoFile = new File("C:\\Users\\junw\\Documents\\GitHub\\test-BookMarkAnalysis\\src\\main\\java\\wo1261931780\\testBookMarkAnalysis\\bookmarks\\result.txt");
-		// boolean newFile = file.createNewFile();
 		log.info("创建文件：{}", demoFile.isFile());
-		// BufferedWriter x2 = new BufferedWriter(new FileWriter(demoFile.getName()));
-		// char[] x3 = new char[1024];
 		bookMarksList.forEach(s -> {
 			log.info("书签：{}", s);
 			if (ObjectUtil.isNotNull(s)) {
@@ -133,15 +141,12 @@ public class ShowMeListController {
 				switch (s.getType()) {
 					case "a":
 						writer.append("<DT><A HREF=\"" + s.getHref() + "\" ADD_DATE=\"" + s.getAddDate() + "ICON=\" \">" + s.getTitle() + "</A>\r\n");
-						// x2.write("<DT><A HREF=\"" + s.getHref() + "\" ADD_DATE=\"" + s.getAddDate() + "ICON=\" \">" + s.getTitle() + "</A>");
 						// <DT><A HREF="https://www.baidu.com/" ADD_DATE="1645517630" ICON="=">百度</A>
 						break;
 					case "H3":
 						writer.append("<DT><H3 HREF=\" \" ADD_DATE=\" " + s.getAddDate() + " LAST_MODIFIED=\"" + s.getLastModified() + "\">" + s.getTitle() + "</H3>\r\n");
-						// log.info("书签：{}", s);
 						break;
 					default:
-						// s.setLastModified(0);
 						break;
 				}
 			}

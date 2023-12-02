@@ -199,11 +199,18 @@
 	<select id="batchInsert2" parameterType="map" resultType="java.lang.Integer">
 		<!--@mbg.generated-->
 		insert into test_technical.book_marks2
-		(id, href, add_date, title, `type`, last_modified)
+			(id, href, add_date, title, `type`, last_modified)
 		values
 		<foreach collection="list" item="item" separator=",">
 			(#{item.id,jdbcType=BIGINT}, #{item.href,jdbcType=LONGVARCHAR}, #{item.addDate,jdbcType=BIGINT},
-			#{item.title,jdbcType=LONGVARCHAR}, #{item.type,jdbcType=VARCHAR}, #{item.lastModified,jdbcType=BIGINT})
+			 #{item.title,jdbcType=LONGVARCHAR}, #{item.type,jdbcType=VARCHAR}, #{item.lastModified,jdbcType=BIGINT})
 		</foreach>
+	</select>
+
+	<select id="selectAllH3" resultMap="BaseResultMap">
+		SELECT *
+		FROM test_technical.book_marks
+		WHERE href IS NULL
+		order by title;
 	</select>
 </mapper>
