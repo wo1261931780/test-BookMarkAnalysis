@@ -14,6 +14,8 @@ import wo1261931780.testBookMarkAnalysis.mapper.BookMarksMapper;
 import wo1261931780.testBookMarkAnalysis.service.BookMarksService;
 import wo1261931780.testBookMarkAnalysis.service.BookmarksParserService;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,6 +113,19 @@ public class ShowMeListController {
 		}
 		int batchInsert = bookMarksService.batchInsert2(bookMarksList);
 		return ShowResult.sendSuccess(batchInsert > 0);
+	}
+
+	@PostMapping
+	public ShowResult<Boolean> requestWriteHtml() {
+		List<BookMarks> bookMarksList = bookMarksService.list();
+		File file = new File("D:\\test\\bookmarks.html");
+		InputStream fileinputStream = new InputStream() {
+			@Override
+			public int read() {
+				return 0;
+			}
+		};
+		return ShowResult.sendSuccess(Boolean.TRUE);
 	}
 
 }
