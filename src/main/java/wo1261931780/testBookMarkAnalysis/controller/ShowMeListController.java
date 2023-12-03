@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import wo1261931780.testBookMarkAnalysis.config.ShowResult;
 import wo1261931780.testBookMarkAnalysis.entity.BookMarks;
+import wo1261931780.testBookMarkAnalysis.entity.BookMarks2;
 import wo1261931780.testBookMarkAnalysis.mapper.BookMarksMapper;
 import wo1261931780.testBookMarkAnalysis.service.BookMarksService;
 import wo1261931780.testBookMarkAnalysis.service.BookmarksParserService;
@@ -16,6 +17,7 @@ import wo1261931780.testBookMarkAnalysis.service.BookmarksParserService;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static java.lang.constant.ConstantDescs.NULL;
@@ -36,6 +38,9 @@ public class ShowMeListController {
 
 	@Autowired
 	private BookMarksService bookMarksService;
+	@Autowired
+	private BookMarks2Service bookMarks2Service;
+
 	@Autowired
 	private BookMarksMapper bookMarksMapper;
 	@Autowired
@@ -75,7 +80,7 @@ public class ShowMeListController {
 	}
 
 	/**
-	 * 新增解析后的书签
+	 * 新增解析后的书签，包含文件夹和重复
 	 *
 	 * @return 插入数量
 	 */
@@ -92,7 +97,7 @@ public class ShowMeListController {
 	}
 
 	/**
-	 * 书签去重后插入新表
+	 * 书签去重后插入新表，不包含文件夹
 	 *
 	 * @return 插入结果
 	 */
@@ -114,6 +119,11 @@ public class ShowMeListController {
 		return ShowResult.sendSuccess(batchInsert > 0);
 	}
 
+	/**
+	 * 文件夹插入新表
+	 *
+	 * @return 插入结果
+	 */
 	@PostMapping("/insertNewH3")
 	public ShowResult<Boolean> insertNewH3() {
 		List<BookMarks> oneUrls = bookMarksMapper.selectAllH3();
@@ -122,16 +132,17 @@ public class ShowMeListController {
 		return ShowResult.sendSuccess(batchInsert > 0);
 	}
 
+	/**
+	 * 将对象拼接属性到文件中
+	 *
+	 * @return 拼接结果
+	 * @throws Exception 异常
+	 */
 	@PostMapping("/requestWriteHtml")
 	public ShowResult<Boolean> requestWriteHtml() throws Exception {
-		List<BookMarks> bookMarksList = bookMarksService.list(); //todo 列表不对
-		bookMarksList.sort((b1, b2) -> {
-			if (b1.getHref() != null && b2.getHref() != null) {
-				return b1.getHref().compareTo(b2.getHref());
-			} else {
-				return 0;
-			}
-		});
+		List<BookMarks2> bookMarksList = bookMarks2Service.list();
+		bookMarksList.sort(Comparator.comparing(BookMarks2::getHref, Comparator.nullsLast(Comparator.reverseOrder())));
+		// objects.sort(Comparator.comparing(obj -> obj.getHref(), Comparator.nullsLast(Comparator.reverseOrder())));
 		File demoFile = new File("C:\\Users\\junw\\Documents\\GitHub\\test-BookMarkAnalysis\\src\\main\\java\\wo1261931780\\testBookMarkAnalysis\\bookmarks\\result.txt");
 		log.info("创建文件：{}", demoFile.isFile());
 		bookMarksList.forEach(s -> {
@@ -140,11 +151,12 @@ public class ShowMeListController {
 				FileWriter writer = new FileWriter(demoFile);
 				switch (s.getType()) {
 					case "a":
-						writer.append("<DT><A HREF=\"" + s.getHref() + "\" ADD_DATE=\"" + s.getAddDate() + "ICON=\" \">" + s.getTitle() + "</A>\r\n");
+						writer.append("<DT><A HREF=\"" + s.getHref() + "\" ADD_DATE=\"" + s.getAddDate() + "\" ICON=\" \">" + s.getTitle() + "</A>\r\n");
 						// <DT><A HREF="https://www.baidu.com/" ADD_DATE="1645517630" ICON="=">百度</A>
 						break;
-					case "H3":
-						writer.append("<DT><H3 HREF=\" \" ADD_DATE=\" " + s.getAddDate() + " LAST_MODIFIED=\"" + s.getLastModified() + "\">" + s.getTitle() + "</H3>\r\n");
+					case "h3":
+						// writer.append("<DT><H3 ADD_DATE=\"" + s.getAddDate() + "\" LAST_MODIFIED=\"" + s.getLastModified() + "\" HREF=\" \">" + s.getTitle() + "</H3>\r\n");
+						writer.append("<DT><H3 ADD_DATE=\"" + s.getAddDate() + "\" LAST_MODIFIED=\"" + s.getLastModified() + "\">" + s.getTitle() + "</H3>\r\n");
 						break;
 					default:
 						break;
